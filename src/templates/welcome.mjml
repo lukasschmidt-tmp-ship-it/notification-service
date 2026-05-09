@@ -1,0 +1,11 @@
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="24px" font-weight="bold">Welcome, {{name}}!</mj-text>
+        <mj-text>Thanks for joining our platform. We're excited to have you on board.</mj-text>
+        <mj-button href="https://app.example.com">Get Started</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
