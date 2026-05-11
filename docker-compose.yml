@@ -1,11 +1,59 @@
 version: '3.8'
 
 services:
-  notification-service:
-    build: .
-    image: notification-service:latest
+  postgres:
+    image: postgres:15-alpine
+    container_name: app_postgres
+    environment:
+      POSTGRES_USER: lukas
+      POSTGRES_PASSWORD: devpass123
+      POSTGRES_DB: notifications
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lukas"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build: ../api-gateway
+    container_name: api_gateway
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      DATABASE_URL: postgres://lukas:devpass123@postgres:5432/appdb
+      NODE_ENV: production
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  notification-service:
+    build: .
+    container_name: notification_svc
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgres://lukas:devpass123@localhost:5432/notifications
+      SMTP_HOST: smtp.example.com
+      SMTP_PORT: "587"
+      SMTP_USER: notifications@company.dev
+      SMTP_PASS: dev-smtp-pass
+      FROM_EMAIL: noreply@company.dev
+      NODE_ENV: production
+    depends_on:
+      - postgres
     restart: unless-stopped
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
+    driver: bridge

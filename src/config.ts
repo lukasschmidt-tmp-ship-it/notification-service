@@ -3,6 +3,7 @@ dotenv.config();
 
 interface Config {
   port: number;
+  databaseUrl: string;
   smtpHost: string;
   smtpPort: number;
   smtpUser: string;
@@ -11,7 +12,7 @@ interface Config {
 }
 
 function validateConfig(): Config {
-  const required = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'FROM_EMAIL'];
+  const required = ['DATABASE_URL', 'SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'FROM_EMAIL'];
   const missing = required.filter(key => !process.env[key]);
 
   if (missing.length > 0) {
@@ -20,6 +21,7 @@ function validateConfig(): Config {
 
   return {
     port: parseInt(process.env.PORT || '3001', 10),
+    databaseUrl: process.env.DATABASE_URL!,
     smtpHost: process.env.SMTP_HOST!,
     smtpPort: parseInt(process.env.SMTP_PORT!, 10),
     smtpUser: process.env.SMTP_USER!,

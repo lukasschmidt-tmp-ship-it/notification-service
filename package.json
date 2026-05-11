@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
+    "pg": "^8.11.3",
     "nodemailer": "^6.9.8",
     "dotenv": "^16.3.1",
     "winston": "^3.11.0"
@@ -17,6 +18,7 @@
   "devDependencies": {
     "typescript": "^5.3.3",
     "@types/express": "^4.17.21",
+    "@types/pg": "^8.10.9",
     "@types/nodemailer": "^6.4.14",
     "ts-node-dev": "^2.0.0",
     "mjml": "^4.15.3"
